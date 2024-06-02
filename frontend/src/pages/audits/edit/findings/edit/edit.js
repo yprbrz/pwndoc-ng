@@ -21,7 +21,9 @@ export default {
     },
     data: () => {
         return {
-            finding: {},
+            finding: {
+                readyForRetest: false,
+            },
             findingOrig: {},
             selectedTab: "definition",
             proofsTabVisited: false,
@@ -96,7 +98,17 @@ export default {
 
         screenshotsSize: function() {
             return ((JSON.stringify(this.uploadedImages).length) / 1024).toFixed(2)
-        }
+        },
+
+        isRemediationAudit() {
+            return this.$parent.audit.auditType && this.$parent.audit.auditType.toLowerCase() === 'remediation';
+        },
+    },
+
+    watch: {
+        'finding.title': 'checkReadyToSave',
+        'finding.vulnType': 'checkReadyToSave',
+        'finding.observation': 'checkReadyToSave',
     },
 
     methods: {
@@ -164,7 +176,7 @@ export default {
         updateFinding: function() {
             Utils.syncEditors(this.$refs)
             this.$nextTick(() => {
-                if (this.$refs.customfields && this.$refs.customfields.requiredFieldsEmpty()) {
+                if (this.auditType !== 'remediation' && this.$refs.customfields && this.$refs.customfields.requiredFieldsEmpty()) {
                     Notify.create({
                         message: $t('msg.fieldRequired'),
                         color: 'negative',
@@ -272,6 +284,13 @@ export default {
         },
         unsavedChanges: function() {
             return this.needSave
+        },
+        checkReadyToSave() {
+            if (this.isRemediationAudit) {
+                 this.readyToSave = this.finding.title && this.finding.vulnType && this.finding.observation;
+            } else {
+                 this.readyToSave = this.finding.title && this.finding.vulnType && this.finding.description && this.finding.observation && this.finding.cvssv3;
+            }
         }
     }
 }

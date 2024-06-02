@@ -29,8 +29,9 @@ var Finding = {
     poc:                    String,
     scope:                  String,
     status:                 {type: Number, enum: [0,1], default: 1}, // 0: done, 1: redacting
+    readyForRetest:         {type: Number, enum: [0,1], default: 1}, // 0: not ready, 1: ready
     category:               String,
-    customFields:           [customField]
+    customFields:           [customField],
 }
 
 var Service = {

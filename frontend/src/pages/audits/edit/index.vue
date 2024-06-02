@@ -175,6 +175,9 @@
                         <q-item-section side v-if="finding.status === 0">
                           <q-icon name="check" color="green" />
                         </q-item-section>
+                        <q-item-section side v-if="finding.readyForRetest === 0">
+                          <q-icon name="check" color="blue" />
+                        </q-item-section>
                       </q-item>
                       <div class="row">
                         <div v-for="(user,idx) in findingUsers" :key="idx" v-if="user.finding === finding._id" class="col multi-colors-bar" :style="{background:user.color}" />

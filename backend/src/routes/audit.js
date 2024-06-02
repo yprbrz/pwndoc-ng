@@ -204,6 +204,7 @@ module.exports = function(app, io) {
         if (req.body.template) update.template = req.body.template;
         if (req.body.customFields) update.customFields = req.body.customFields;
         if (settings.reviews.enabled && settings.reviews.private.removeApprovalsUponUpdate) update.approvals = [];
+        // if (req.body.auditType) update.auditType = req.body.auditType;
 
         Audit.updateGeneral(acl.isAllowed(req.decodedToken.role, 'audits:update-all'), req.params.auditId, req.decodedToken.id, update)
         .then(msg => {
@@ -275,8 +276,9 @@ module.exports = function(app, io) {
         if (req.body.poc) finding.poc = req.body.poc;
         if (req.body.scope) finding.scope = req.body.scope;
         if (req.body.status !== undefined) finding.status = req.body.status;
-        if (req.body.category) finding.category = req.body.category
-        if (req.body.customFields) finding.customFields = req.body.customFields
+        if (req.body.readyForRetest !== undefined) finding.readyForRetest = req.body.readyForRetest;
+        if (req.body.category) finding.category = req.body.category;
+        if (req.body.customFields) finding.customFields = req.body.customFields;
 
         if (settings.reviews.enabled && settings.reviews.private.removeApprovalsUponUpdate) {
             Audit.updateGeneral(acl.isAllowed(req.decodedToken.role, 'audits:update-all'), req.params.auditId, req.decodedToken.id, { approvals: [] });
@@ -324,6 +326,7 @@ module.exports = function(app, io) {
         if (!_.isNil(req.body.poc)) finding.poc = req.body.poc;
         if (!_.isNil(req.body.scope)) finding.scope = req.body.scope;
         if (req.body.status !== undefined) finding.status = req.body.status;
+        if (req.body.readyForRetest !== undefined) finding.readyForRetest = req.body.readyForRetest;
         if (req.body.category) finding.category = req.body.category
         if (req.body.customFields) finding.customFields = req.body.customFields
 
